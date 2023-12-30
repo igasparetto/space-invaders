@@ -7,7 +7,7 @@ body {
   overflow: hidden;
 }
 body, body * {
-  touch-action: none;
+  touch-action: pan-y;
 }
 p,
 h1,
