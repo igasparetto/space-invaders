@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Invaders - Pure HTML, CSS and JavaScript game</title>
+
+  <link rel="alternate icon" type="image/png" href="https://igasparetto.github.io/space-invaders/favicon.png">
+
+  <meta property="og:locale" content="en_GB" />
+	<meta property="og:site_name" content="Space Invaders by Ivan Gasparetto" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Space Invaders - Pure HTML, CSS and JavaScript" />
+	<meta property="og:description" content="Space Invaders recreated just for run." />
+	<meta property="og:url" content="https://igasparetto.github.io/space-invaders/" />
+	<meta property="og:image" content="https://igasparetto.github.io/space-invaders/image/screenshot.png" />
+	<meta property="og:image:secure_url" content="https://igasparetto.github.io/space-invaders/image/screenshot.png" />
+	<meta property="og:image:width" content="1024" />
+	<meta property="og:image:height" content="576" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css?v1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <main>
+    <h1 id="gameName"><span>Space Invaders</span></h1>
+    <div id="screen" tabindex="0">
+      <div id="player"></div>
+    </div>
+    <p>Phase: <span id="phase">0</span> | Kills: <span id="kills">0</span></p>
+    <p>Press "s" to start, "p" to pause and "space bar" to shoot.</p>
+    <div id="controls">
+      <div>
+        <button id="btnLeft">Left</button>
+        <button id="btnRight">Right</button>
+        <button id="btnFire">Fire</button>
+        <button id="btnStart">Start</button>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; Ivan Gasparetto</p>
+  </footer>
+  <script src="js/lib/gameEvent.js?v1"></script>
+  <script src="js/lib/entity.js?v1"></script>
+  <script src="js/lib/player.js?v1"></script>
+  <script src="js/lib/bullet.js?v1"></script>
+  <script src="js/lib/enemy.js?v1"></script>
+  <script src="js/lib/game.js?v1"></script>
+  <script src="js/spaceInvaders.js?v1"></script>
+</body>
+
+</html>
