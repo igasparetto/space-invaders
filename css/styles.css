@@ -265,19 +265,21 @@ button:focus {
 @media (max-width: 900px) {
   #controls button {
     position: absolute;
-    top: 330px;
+    top: 130px;
     width: 80px;
   }
   #controls #btnLeft {
-    right: 160px;
+    right: 10px;
+    top: 185px;
   }
   #controls #btnRight {
-    right: 70px;
+    right: 10px;
   }
   #controls #btnStart {
-    left: 70px;
+    left: 10px;
   }
   #controls #btnFire {
-    left: 160px;
+    left: 10px;
+    top: 185px;
   }
 }
