@@ -61,6 +61,7 @@ let phaseKills = 0;
 let enemies = [];
 
 function startGame() {
+  cleanUp();
   $gameContainer.focus();
   phaseNumber = 0;
   totalKills = 0;
@@ -177,6 +178,18 @@ function afterNextMove() {
   return true;
 }
 
+function cleanUp() {
+  for (let row = 0; row < enemies.length; row++) {
+    for (let col = 0; col < enemies[row].length; col++) {
+      if(enemies[row][col]) {
+        enemies[row][col].stopMove();
+        enemies[row][col].$entity.remove();
+        delete enemies[row][col];
+      }
+    }
+  }
+}
+
 game.bind(document.body, "game:pause", function () {
   $btnStart.innerHTML = "Go";
   $gameName.classList.remove("hide");
@@ -197,7 +210,7 @@ game.bind(document.body, "game:over", function () {
   game.playing = false;
   gameOverAudio.play();
   $btnStart.innerHTML = "Start";
-  $gameName.classList.add("hide");
+  $gameName.classList.remove("hide");
 });
 
 // Event: enemy kill
@@ -207,20 +220,12 @@ game.bind(document.body, "enemy:kill", function () {
   $kills.innerHTML = totalKills;
   if (phaseKills == countEnemies) {
     game.trigger(document.body, "phase:win");
-    setTimeout(initEnemies, 1500);
+    setTimeout(initEnemies, 2000);
   }
 });
 
 // Event: phase win
-game.bind(document.body, "phase:win", function () {
-  for (let row = 0; row < enemies.length; row++) {
-    for (let col = 0; col < enemies[row].length; col++) {
-      enemies[row][col].stopMove();
-      enemies[row][col].$entity.remove();
-      delete enemies[row][col];
-    }
-  }
-});
+game.bind(document.body, "phase:win", cleanUp);
 
 // Event: Start/Pause
 game.bindKeyboardEvent("s", "keydown", game.startPause.bind(game));
