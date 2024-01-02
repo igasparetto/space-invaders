@@ -48,10 +48,30 @@ div:focus {
   background-image: url(../image/sprite-1.png);
   background-position: -345px -189px;
 }
+@keyframes playerDead {
+  0%,
+  50% {
+    background-position: -438px -189px;
+  }
+  51%,
+  100% {
+    background-position: -387px -189px;
+  }
+}
+#player.dead {
+  width: 48px;
+  margin-left: -9px;
+  animation: playerDead 1s infinite;
+}
 
 .Bullet {
   background-color: white;
   position: absolute;
+}
+.Bullet.enemy-bullet {
+  background-color: transparent;
+  background-image: url(../image/sprite-1.png);
+  background-position: -336px -54px;
 }
 
 @keyframes flipEnemy0 {

@@ -19,7 +19,7 @@
 	<meta property="og:image:width" content="1024" />
 	<meta property="og:image:height" content="576" />
 
-  <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css?v5">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css?v6">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600&display=swap" rel="stylesheet">
@@ -31,13 +31,13 @@
     <div id="screen" tabindex="0">
       <div id="player"></div>
     </div>
-    <p>Phase: <span id="phase">0</span> | Kills: <span id="kills">0</span></p>
-    <p>Press "s" to start, "p" to pause and "space bar" to shoot.</p>
+    <p>Phase: <span id="phase">0</span> | Kills: <span id="kills">0</span> | Record: <span id="record">0</span></p>
+    <p>Press "s" to start, "p" to pause and "space bar" to shoot, left and right arrows to move.</p>
     <div id="controls">
       <div>
-        <button id="btnLeft">Left</button>
-        <button id="btnRight">Right</button>
-        <button id="btnFire">Fire</button>
+        <button id="btnLeft" title="Left">&Larr;</button>
+        <button id="btnRight" title="Right">&Rarr;</button>
+        <button id="btnFire" title="Fire!">&bull;</button>
         <button id="btnStart">Start</button>
       </div>
     </div>
@@ -45,13 +45,14 @@
   <footer>
     <p>&copy; Ivan Gasparetto</p>
   </footer>
-  <script src="js/lib/gameEvent.js?v5"></script>
-  <script src="js/lib/entity.js?v5"></script>
-  <script src="js/lib/player.js?v5"></script>
-  <script src="js/lib/bullet.js?v5"></script>
-  <script src="js/lib/enemy.js?v5"></script>
-  <script src="js/lib/game.js?v5"></script>
-  <script src="js/spaceInvaders.js?v5"></script>
+  <script src="js/lib/gameEvent.js?v6"></script>
+  <script src="js/lib/input.js?v6"></script>
+  <script src="js/lib/entity.js?v6"></script>
+  <script src="js/lib/player.js?v6"></script>
+  <script src="js/lib/bullet.js?v6"></script>
+  <script src="js/lib/enemy.js?v6"></script>
+  <script src="js/lib/game.js?v6"></script>
+  <script src="js/spaceInvaders.js?v6"></script>
 </body>
 
 </html>

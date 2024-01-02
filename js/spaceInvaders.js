@@ -11,6 +11,10 @@ let bulletSizes = {
   width: 3,
   height: 21,
 };
+let enemyBulletSizes = {
+  width: 9,
+  height: 24,
+};
 let enemySizes = {
   width: 24,
   height: 24,
@@ -20,8 +24,11 @@ let enemySizes = {
 let $gameContainer = document.getElementById("screen");
 let $kills = document.getElementById("kills");
 let $phase = document.getElementById("phase");
+let $record = document.getElementById("record");
 let $btnStart = document.getElementById("btnStart");
 let $gameName = document.getElementById("gameName");
+
+$record.innerHTML = localStorage.getItem("record") || 0;
 
 $gameContainer.style.width = gameSizes.width + "px";
 $gameContainer.style.height = gameSizes.height + "px";
@@ -38,6 +45,11 @@ let player = new Player(
 );
 player.setButtonsControl(false, false, "btnLeft", "btnRight");
 player.setBoundaries(0, 0, gameSizes.width, gameSizes.height);
+
+game.bind(player.$entity, "entity:shot", function () {
+  player.$entity.classList.add("dead");
+  game.trigger(document.body, "game:over");
+});
 
 // audio
 let bulletAudio = new Audio("audio/blast.mp3");
@@ -62,6 +74,8 @@ let enemies = [];
 
 function startGame() {
   cleanUp();
+  player.dead = false;
+  player.$entity.classList.remove("dead");
   $gameContainer.focus();
   phaseNumber = 0;
   totalKills = 0;
@@ -103,7 +117,7 @@ function initEnemies() {
         gameSizes.height - gamePadding
       );
       enemy.moveWithinBoundaries = true;
-      enemy.moveTick = 40 - 5 * phaseNumber;
+      enemy.moveTick = 40 - 3 * phaseNumber;
       if ((row == 0) & (col == 0)) {
         enemy.beforeNextMove = beforeNextMove.bind(enemy);
       } else if ((row == numberOfRows - 1) & (col == aliensPerRow - 1)) {
@@ -111,7 +125,7 @@ function initEnemies() {
       }
       enemy.moveFromTo(from, to, 2);
       enemies[row][col] = enemy;
-      game.bind(enemy.$entity, "enemy:kill", function () {
+      game.bind(enemy.$entity, "entity:shot", function () {
         killAudio.play();
         enemy.$entity.classList.add("dead");
       });
@@ -145,12 +159,42 @@ function beforeNextMove() {
   }
   return true;
 }
+function randomEnemyFire(enemy) {
+  if (Math.floor(Math.random() * 1000) !== 1) {
+    return false;
+  }
+  let from = {
+    x: enemy.x + enemy.width / 2 - bulletSizes.width / 2,
+    y: enemy.y + enemy.height,
+  };
+  let to = {
+    x: from.x,
+    y: gameSizes.height + bulletSizes.height,
+  };
+  let playerArray = [];
+  playerArray[0] = [];
+  playerArray[0][0] = player;
+  let enemyBullet = new Bullet(
+    game,
+    from.x,
+    from.y,
+    enemyBulletSizes.width,
+    enemyBulletSizes.height,
+    $gameContainer,
+    "enemy-bullet",
+    playerArray
+  );
+  enemyBullet.move(from, to);
+}
 function afterNextMove() {
   let maxRowIndex = -1;
   let maxRightColIndex = -1;
   let maxAlive;
   for (let row = enemies.length - 1; row >= 0; row--) {
     for (let col = enemies[row].length - 1; col >= 0; col--) {
+      if (!enemies[row][col].dead) {
+        randomEnemyFire(enemies[row][col]);
+      }
       if (maxRightColIndex < col && !enemies[row][col].dead) {
         maxRowIndex = row;
         maxRightColIndex = col;
@@ -179,9 +223,13 @@ function afterNextMove() {
 }
 
 function cleanUp() {
+  bullets = document.getElementsByClassName("Bullet");
+  for (var i = 0; i < bullets.length; i++) {
+    bullets[i].remove();
+  }
   for (let row = 0; row < enemies.length; row++) {
     for (let col = 0; col < enemies[row].length; col++) {
-      if(enemies[row][col]) {
+      if (enemies[row][col]) {
         enemies[row][col].stopMove();
         enemies[row][col].$entity.remove();
         delete enemies[row][col];
@@ -202,6 +250,7 @@ game.bind(document.body, "game:unpause", function () {
 
 // Event: game over
 game.bind(document.body, "game:over", function () {
+  let record = localStorage.getItem("record");
   for (let row = 0; row < enemies.length; row++) {
     for (let col = 0; col < enemies[row].length; col++) {
       enemies[row][col].stopMove();
@@ -211,10 +260,14 @@ game.bind(document.body, "game:over", function () {
   gameOverAudio.play();
   $btnStart.innerHTML = "Start";
   $gameName.classList.remove("hide");
+  if (record < totalKills) {
+    $record.innerHTML = totalKills;
+    localStorage.setItem("record", totalKills);
+  }
 });
 
 // Event: enemy kill
-game.bind(document.body, "enemy:kill", function () {
+game.bind(document.body, "entity:shot", function () {
   phaseKills++;
   totalKills++;
   $kills.innerHTML = totalKills;
@@ -234,27 +287,28 @@ game.bind($btnStart, "click", game.startPause.bind(game));
 game.bind(document.body, "game:start", startGame);
 
 // Event: fire!
-game.bindKeyboardEvent("Space", "keydown", player.fireStart.bind(player));
-game.bindKeyboardEvent("Space", "keyup", player.fireStop.bind(player));
+shoot = new Input("player:fire", game);
+game.bindKeyboardEvent("Space", "keydown", shoot.start.bind(shoot));
+game.bindKeyboardEvent("Space", "keyup", shoot.stop.bind(shoot));
 game.bind(
   document.getElementById("btnFire"),
   "mousedown",
-  player.fireStart.bind(player)
+  shoot.start.bind(shoot)
 );
 game.bind(
   document.getElementById("btnFire"),
   "mouseup",
-  player.fireStop.bind(player)
+  shoot.stop.bind(shoot)
 );
 game.bind(
   document.getElementById("btnFire"),
   "touchstart",
-  player.fireStart.bind(player)
+  shoot.start.bind(shoot)
 );
 game.bind(
   document.getElementById("btnFire"),
   "touchend",
-  player.fireStop.bind(player)
+  shoot.stop.bind(shoot)
 );
 game.bind(document.body, "player:fire", function () {
   let from = {
@@ -272,9 +326,9 @@ game.bind(document.body, "player:fire", function () {
     bulletSizes.width,
     bulletSizes.height,
     $gameContainer,
-    "bullet-1",
+    "hero-bullet",
     enemies
   );
-  bullet.fire(from, to);
+  bullet.move(from, to);
   bulletAudio.play();
 });

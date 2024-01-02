@@ -5,9 +5,6 @@ class Player extends Entity {
   moveLeftInterval = false;
   moveRightInterval = false;
 
-  fireTick = 300;
-  fireInterval = false;
-
   moveWithinBoundaries = false;
 
   allowMoveUp = false;
@@ -223,18 +220,5 @@ class Player extends Entity {
     clearInterval(this.moveRightInterval);
     this.moveRightInterval = false;
     this.trigger(document.body, "player:stopMoveRight");
-  }
-
-  fireStart() {
-    if (this.game.playing && !this.game.paused && !this.fireInterval) {
-      this.fireInterval = setInterval(this.fire.bind(this), this.fireTick);
-    }
-  }
-  fire() {
-    this.trigger(document.body, "player:fire");
-  }
-  fireStop() {
-    clearInterval(this.fireInterval);
-    this.fireInterval = false;
   }
 }

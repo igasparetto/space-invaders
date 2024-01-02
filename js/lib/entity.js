@@ -174,4 +174,8 @@ class Entity extends GameEvent {
       a.y > b.y + b.height
     );
   }
+  kill() {
+    this.dead = true;
+    this.trigger(this.$entity, "entity:shot");
+  }
 }

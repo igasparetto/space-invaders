@@ -9,8 +9,4 @@ class Enemy extends Entity {
     }
     this.appendTo($gameContainer);
   }
-  kill() {
-    this.dead = true;
-    this.trigger(this.$entity, "enemy:kill");
-  }
 }
