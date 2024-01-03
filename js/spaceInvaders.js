@@ -131,6 +131,7 @@ function initEnemies() {
       });
     }
   }
+  game.trigger(document.body, "enemy:init");
 }
 // before/after move functions
 function beforeNextMove() {
@@ -251,11 +252,6 @@ game.bind(document.body, "game:unpause", function () {
 // Event: game over
 game.bind(document.body, "game:over", function () {
   let record = localStorage.getItem("record");
-  for (let row = 0; row < enemies.length; row++) {
-    for (let col = 0; col < enemies[row].length; col++) {
-      enemies[row][col].stopMove();
-    }
-  }
   game.playing = false;
   gameOverAudio.play();
   $btnStart.innerHTML = "Start";
@@ -329,6 +325,14 @@ game.bind(document.body, "player:fire", function () {
     "hero-bullet",
     enemies
   );
+  // refresh, if needed
+
+  bullet.bind(document.body, "game:over", function () {
+    bullet.stopMove();
+  })
+  bullet.bind(document.body, "enemy:init", function() {
+    bullet.enemies = enemies;
+  });
   bullet.move(from, to);
   bulletAudio.play();
 });
