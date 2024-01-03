@@ -260,6 +260,7 @@ game.bind(document.body, "game:over", function () {
     $record.innerHTML = totalKills;
     localStorage.setItem("record", totalKills);
   }
+  shoot.stop();
 });
 
 // Event: enemy kill
