@@ -68,10 +68,30 @@ div:focus {
   background-color: white;
   position: absolute;
 }
+
+@keyframes spinEnemyBullet {
+  0%,
+  25% {
+    background-position: -417px -54px;
+  }
+  26%,
+  50% {
+    background-position: -390px -54px;
+  }
+  51%,
+  75% {
+    background-position: -363px -54px;
+  }
+  76%,
+  100% {
+    background-position: -336px -54px;
+  }
+}
 .Bullet.enemy-bullet {
   background-color: transparent;
   background-image: url(../image/sprite-1.png);
-  background-position: -336px -54px;
+  background-position: -417px -54px;
+  animation: spinEnemyBullet 0.25s infinite;
 }
 
 @keyframes flipEnemy0 {
